@@ -20,6 +20,7 @@
         <module>dictionary-server</module>
         <module>dictionary-logic</module>
         <module>dictionary-common</module>
+        <module>dictionary-client</module>
     </modules>
 
 </project>
