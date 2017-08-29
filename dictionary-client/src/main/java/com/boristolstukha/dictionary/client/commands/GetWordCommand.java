@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 public class GetWordCommand extends AbstractWordCommand {
 
     public GetWordCommand(String hostString, String word) {
-        super(hostString, word);
+        super(hostString, word, null);
     }
 
     @Override

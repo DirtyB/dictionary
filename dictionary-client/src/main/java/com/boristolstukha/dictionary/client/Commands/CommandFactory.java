@@ -1,15 +1,20 @@
 package com.boristolstukha.dictionary.client.commands;
 
-import com.boristolstukha.dictionary.client.UrlComponentsBuilderInitializer;
-import org.springframework.web.util.UriComponentsBuilder;
+import java.util.Arrays;
 
 public class CommandFactory {
 
     public static Command createCommand(String[] args) {
         if(args.length >= 3){
-            switch (args[1]){
+            String commandId = args[1];
+            String host = args[0];
+            String word = args[2];
+            String[] values =  Arrays.copyOfRange(args, 3, args.length);
+            switch (commandId){
                 case "get":
-                    return new GetWordCommand(args[0], args[2]);
+                    return new GetWordCommand(host, word);
+                case "add":
+                    return new AddWordCommand(host, word, values);
             }
         }
         return new HelpCommand();

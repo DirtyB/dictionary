@@ -1,12 +1,10 @@
 package com.boristolstukha.dictionary.client.commands;
 
-import com.boristolstukha.dictionary.common.dto.DefinitionSetDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -17,10 +15,12 @@ public abstract class AbstractWordCommand extends AbstractCommand {
 
     protected String word;
     protected String hostString;
+    protected String[] values;
 
-    AbstractWordCommand(String hostString, String word){
+    AbstractWordCommand(String hostString, String word, String[] values){
         this.word = word;
         this.hostString = hostString;
+        this.values = values;
     }
 
     @Override
