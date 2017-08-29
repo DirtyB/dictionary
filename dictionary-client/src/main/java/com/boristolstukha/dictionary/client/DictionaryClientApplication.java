@@ -1,5 +1,7 @@
 package com.boristolstukha.dictionary.client;
 
+import com.boristolstukha.dictionary.client.Commands.Command;
+import com.boristolstukha.dictionary.client.Commands.CommandFactory;
 import com.boristolstukha.dictionary.common.dto.DefinitionSetDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
@@ -16,6 +18,16 @@ public class DictionaryClientApplication {
 
 
     public static void main(String[] args) {
+
+        Command command = CommandFactory.createCommand(args);
+        command.setOutputStream(System.out);
+        try {
+            command.run();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
         RestTemplate restTemplate = new RestTemplate();
 
         String host = (args.length > 0) ? args[0] : "localhost:8080";
