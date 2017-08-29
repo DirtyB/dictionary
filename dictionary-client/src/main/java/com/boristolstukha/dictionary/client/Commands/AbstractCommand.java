@@ -1,4 +1,4 @@
-package com.boristolstukha.dictionary.client.Commands;
+package com.boristolstukha.dictionary.client.commands;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
