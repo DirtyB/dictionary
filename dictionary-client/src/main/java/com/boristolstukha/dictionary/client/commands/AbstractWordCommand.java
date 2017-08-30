@@ -30,7 +30,6 @@ public abstract class AbstractWordCommand extends AbstractCommand {
                 .replacePath("/dictionary")
                 .pathSegment(word)
                 .toUriString();
-        outputStream.println(uriString);
         try {
             performRequest(uriString);
         } catch (HttpClientErrorException exception) {
@@ -47,8 +46,7 @@ public abstract class AbstractWordCommand extends AbstractCommand {
                 message = result.get("message");
 
             } catch (IOException e) {
-                //todo: log error
-                e.printStackTrace();
+                logger.error(e);
             }
             if(message == null){
                 message = "Неизвестная ошибка";
@@ -56,7 +54,7 @@ public abstract class AbstractWordCommand extends AbstractCommand {
             outputStream.println(message);
         }
         catch (ResourceAccessException exception){
-            //todo: log error
+            logger.error(exception);
             outputStream.println("Не удалось соединиться с сервером");
         }
     }
