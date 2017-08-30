@@ -3,57 +3,96 @@ package com.boristolstukha.dictionary.logic;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * An implementation of {@code dictionary} that may be used in concurrent environment
+ */
 public class ConcurrentDictionary implements Dictionary{
 
     private Map<String, Set<String>> dictionaryMap = new ConcurrentHashMap<>();
 
-    @Override
-    public boolean add(String key, String value) {
-        List<String> list = new ArrayList<>(1);
-        list.add(value);
-        return add(key, list);
-    }
-
-    @Override
-    public boolean add(String key, Collection<String> values) {
-        Set<String> valueSet = getOrCreateValueSet(key);
-        synchronized (valueSet) {
-            return valueSet.addAll(values);
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Set<String> get(String key) {
         Set<String> valueSet = dictionaryMap.get(key);
         if(valueSet == null || valueSet.isEmpty()){
-            return null;
+            return Collections.emptySet();
         }
         return new HashSet<>(valueSet);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean delete(String key, String value) {
-        List<String> list = new ArrayList<>(1);
-        list.add(value);
-        return delete(key, list);
-    }
-
-    @Override
-    public boolean delete(String key, Collection<String> values) {
-        Set<String> valueSet = dictionaryMap.get(key);
-        if(valueSet == null){
+    public boolean add(String key, Collection<String> values) {
+        if(values == null){
             return false;
         }
-        synchronized (valueSet) {
-            return valueSet.removeAll(values);
+        Set<String> curSet = dictionaryMap.get(key);
+        while(true) {
+
+            if((curSet != null) && curSet.containsAll(values)) {
+                return false;
+            }
+
+            Set<String > newSet = new HashSet<>(values);
+
+            if(curSet == null) {
+
+                curSet = dictionaryMap.putIfAbsent(key, newSet);
+                if(curSet == null) {
+                    return true;
+                }
+
+            } else {
+
+                newSet.addAll(curSet);
+                if(dictionaryMap.replace(key, curSet, newSet)) {
+                    return true;
+                }
+                curSet = dictionaryMap.get(key);
+
+            }
+
         }
     }
 
-    private Set<String> getOrCreateValueSet(String key){
-        if(key == null){
-            throw new NullPointerException();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean delete(String key, Collection<String> values) {
+        if(values == null){
+            return false;
         }
-        return dictionaryMap.computeIfAbsent(key, (String _key)-> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+        Set<String> curSet = dictionaryMap.get(key);
+        while(true) {
+
+            if((curSet == null) || Collections.disjoint(curSet, values))  {
+                return false;
+            }
+
+            Set<String> newSet = new HashSet<>(curSet);
+            newSet.removeAll(values);
+
+            if(newSet.isEmpty()) {
+
+                if(dictionaryMap.remove(key, curSet)) {
+                    return true;
+                }
+
+            } else {
+
+                if(dictionaryMap.replace(key, curSet, newSet)) {
+                    return true;
+                }
+
+            }
+
+            curSet = dictionaryMap.get(key);
+        }
     }
 
 }

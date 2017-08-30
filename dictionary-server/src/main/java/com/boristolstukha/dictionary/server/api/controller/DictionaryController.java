@@ -24,7 +24,7 @@ public class DictionaryController {
     @RequestMapping(value = "/{word}", method = RequestMethod.GET)
     public DefinitionSetDTO getDefinitions(@PathVariable("word") String word) throws NotFoundHttpException {
         Set<String> definitions = dictionary.get(word);
-        if(definitions == null){
+        if(definitions.isEmpty()){
             throw new NotFoundHttpException(WORD_NOT_FOUND);
         }
         DefinitionSetDTO definitionSetDTO = new DefinitionSetDTO();
