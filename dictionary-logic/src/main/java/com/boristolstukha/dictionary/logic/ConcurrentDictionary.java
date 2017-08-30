@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * An implementation of {@code dictionary} that may be used in concurrent environment
+ * Concept taken from {@see https://stackoverflow.com/a/12200596}
  */
 public class ConcurrentDictionary implements Dictionary{
 
