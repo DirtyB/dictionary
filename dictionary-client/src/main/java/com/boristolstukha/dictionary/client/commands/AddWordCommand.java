@@ -13,7 +13,6 @@ public class AddWordCommand extends AbstractWordCommand {
 
     @Override
     protected void performRequest(String uriString) {
-        //todo проверить что values не пусто
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.put(uriString, values);
         outputStream.println("Значения слова успешно добавлены");

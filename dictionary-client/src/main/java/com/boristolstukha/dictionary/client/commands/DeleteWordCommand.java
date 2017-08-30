@@ -13,7 +13,6 @@ public class DeleteWordCommand extends AbstractWordCommand {
 
     @Override
     protected void performRequest(String uriString) {
-        //todo проверить что values не пусто
         CustomRestTemplate restTemplate = new CustomRestTemplate();
         restTemplate.deleteWithBody(uriString, values);
         outputStream.println("Значения слова успешно удалены");
