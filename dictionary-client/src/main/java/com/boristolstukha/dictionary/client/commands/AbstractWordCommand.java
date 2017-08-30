@@ -10,14 +10,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class AbstractWordCommand extends AbstractCommand {
 
     protected String word;
     protected String hostString;
-    protected String[] values;
+    protected Set<String> values;
 
-    AbstractWordCommand(String hostString, String word, String[] values){
+    AbstractWordCommand(String hostString, String word, Set<String> values){
         this.word = word;
         this.hostString = hostString;
         this.values = values;
@@ -29,6 +30,7 @@ public abstract class AbstractWordCommand extends AbstractCommand {
                 .replacePath("/dictionary")
                 .pathSegment(word)
                 .toUriString();
+        outputStream.println(uriString);
         try {
             performRequest(uriString);
         } catch (HttpClientErrorException exception) {
@@ -46,6 +48,7 @@ public abstract class AbstractWordCommand extends AbstractCommand {
 
             } catch (IOException e) {
                 //todo: log error
+                e.printStackTrace();
             }
             if(message == null){
                 message = "Неизвестная ошибка";

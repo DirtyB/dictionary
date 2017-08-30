@@ -1,6 +1,8 @@
 package com.boristolstukha.dictionary.client.commands;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CommandFactory {
 
@@ -9,12 +11,15 @@ public class CommandFactory {
             String commandId = args[1];
             String host = args[0];
             String word = args[2];
-            String[] values =  Arrays.copyOfRange(args, 3, args.length);
+            Set<String> values = new HashSet<>();
+            values.addAll(Arrays.asList(Arrays.copyOfRange(args, 3, args.length)));
             switch (commandId){
                 case "get":
                     return new GetWordCommand(host, word);
                 case "add":
                     return new AddWordCommand(host, word, values);
+                case "delete":
+                    return new DeleteWordCommand(host, word, values);
             }
         }
         return new HelpCommand();
