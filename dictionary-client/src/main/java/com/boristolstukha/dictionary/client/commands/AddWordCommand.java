@@ -16,7 +16,7 @@ public class AddWordCommand extends AbstractWordCommand {
         //todo проверить что values не пусто
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.put(uriString, values);
-        outputStream.println("значения слова успешно добавлены");
+        outputStream.println("Значения слова успешно добавлены");
     }
 
 }

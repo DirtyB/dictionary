@@ -16,7 +16,7 @@ public class DeleteWordCommand extends AbstractWordCommand {
         //todo проверить что values не пусто
         CustomRestTemplate restTemplate = new CustomRestTemplate();
         restTemplate.deleteWithBody(uriString, values);
-        outputStream.println("значения слова успешно удалены");
+        outputStream.println("Значения слова успешно удалены");
     }
 
     private class CustomRestTemplate extends RestTemplate{
